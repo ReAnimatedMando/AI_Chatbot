@@ -19,3 +19,8 @@ require('dotenv').config()
 
 const OPENAI_SECRET_KEY = process.env.OPENAI_SECRET_KEY
 
+const configuration = new Configuration({
+    apiKey: OPENAI_SECRET_KEY
+})
+
+const openai = new OpenAIApi(configuration)
