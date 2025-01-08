@@ -13,6 +13,7 @@ Step 4. Create a run function that requests a user input.
 import OpenAI from 'openai'
 import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
+const prompt = require('prompt-sync')()
 require('dotenv').config()
 
 // Step 1.
@@ -51,15 +52,27 @@ async function sendPrompt(input) {
     ]
     const completion = await openai.chat.completions.create({
         model,
-        messages: current_messages
+        messages: current_message
     })
-    console.log(completion)
+    let response = completion.choices[0].message 
+    messages.push(response)
+    console.log(response.content)
+    getUserInput()
 }
 
 // Step 4.
 
 async function run() {
-    await sendPrompt 
+    getUserInput()
+}
+
+function getUserInput() {
+    let new_user_input = prompt('How would you like to respond?')
+    messages.push({
+        'role': 'user',
+        'content': new_user_input
+    })
+    sendPrompt()
 }
 
 run()
